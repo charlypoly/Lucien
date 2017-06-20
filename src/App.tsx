@@ -1,56 +1,56 @@
 import * as React from 'react';
-import './App.css';
 import { connect, Dispatch } from 'react-redux';
-import { StoreState, ExerciceComponent } from "./types/index";
+import { RouteComponentProps } from 'react-router';
+import './App.css';
 import * as actions from './actions/';
-
+import { ExerciceComponent, StoreState } from './types/index';
 
 interface ConnectedProps {
-  currentExercice?: ExerciceComponent;
-  setCurrentExercice?: (component: ExerciceComponent) => any;
+    currentExercice?: ExerciceComponent;
+    setCurrentExercice?: (component: ExerciceComponent) => {};
 }
 
-// function App({ currentExercice = 'IntervalQuizz', setCurrentExercice }: ConnectedProps) {
-//   return <div></div>;
-// }
+type Props = ConnectedProps & RouteComponentProps<{}>;
 
-class App extends React.Component<ConnectedProps, {}> {
+class App extends React.Component<Props, {}> {
 
-  toggle = () => {
-    if (this.props.setCurrentExercice) {
-      if (this.props.currentExercice === 'ChordConstruction') {
-        this.props.setCurrentExercice('IntervalQuizz');
-      } else {
-        this.props.setCurrentExercice('ChordConstruction');
-      }
+    toggle = () => {
+        if (this.props.setCurrentExercice) {
+            if (this.props.currentExercice === 'ChordConstruction') {
+                this.props.setCurrentExercice('IntervalQuizz');
+            } else {
+                this.props.setCurrentExercice('ChordConstruction');
+            }
+        }
     }
-  }
-  render() {
-    return (
-      <div className="App">
-        <div>
-          {this.props.currentExercice}
-        </div>
-        <div>
-          <button onClick={this.toggle}>
-            Change exercice
+    render() {
+        return (
+            <div className="App">
+                <div>
+                    {this.props.currentExercice}
+                </div>
+                <div>
+                    <button onClick={this.toggle}>
+                        Change exercice
           </button>
-        </div>
-      </div>
-    );
-  }
+                </div>
+            </div>
+        );
+    }
 }
 
 export function mapStateToProps({ structure }: StoreState): { currentExercice?: ExerciceComponent } {
-  return {
-    currentExercice: structure.currentExerciceComponent
-  }
+    return {
+        currentExercice: structure.currentExerciceComponent
+    };
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.SetCurrentExercice>): { setCurrentExercice?: (component: ExerciceComponent) => any; } {
-  return {
-    setCurrentExercice: (component: ExerciceComponent) => dispatch(actions.setCurrentExercice(component))
-  }
+export function mapDispatchToProps(dispatch: Dispatch<actions.SetCurrentExercice>):
+    { setCurrentExercice?: (component: ExerciceComponent) => {}; } {
+
+    return {
+        setCurrentExercice: (component: ExerciceComponent) => dispatch(actions.setCurrentExercice(component))
+    };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect<ConnectedProps, any, Props>(mapStateToProps, mapDispatchToProps)(App);
